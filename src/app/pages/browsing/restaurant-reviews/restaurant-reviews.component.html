@@ -1,0 +1,30 @@
+<div class="container-lg">
+    <div id = "alert-bar">
+
+    </div>
+    <div id="return-holder" class="row m-1">
+
+    </div>
+    <div class="row">
+        <div class = "d-flex justify-content-center" *ngIf="!reviewsLoaded">
+            <div class="spinner-border"></div>
+        </div>
+        <div class = "flex-column">
+            <div>
+                Display restaurant here.
+                <p>Restaurant Name : {{restaurant.name}}</p>
+                <p>Restaurant Owner: {{restaurant.owner_name}}</p>
+                <p>Restaurant Location: {{restaurant.location_name}}</p>
+            </div>
+
+        </div>
+        <div class="flex-column" style="border: 2px solid red; padding: 1rem;">
+            Restaurant Reviews:
+            <div *ngFor="let review of restaurant.restaurantReviews" reviewData="review">
+                <div style="padding: 1em; border: 2px solid blue;">
+                    <h5>Review text: {{review.reviewText}}</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
