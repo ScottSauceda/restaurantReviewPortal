@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { RestaurantReviewsComponent } from './pages/browsing/restaurant-reviews/restaurant-reviews.component';
 import { RestaurantsComponent } from './pages/browsing/restaurants/restaurants.component';
+import { ReviewComponent } from './pages/dashboard/review/review.component';
 import { UserProfileComponent } from './pages/dashboard/user-profile/user-profile.component';
 import { UserReviewsComponent } from './pages/dashboard/user-reviews/user-reviews.component';
 import { HomeComponent } from './pages/home/home.component';
@@ -10,7 +11,7 @@ import { SignupComponent } from './pages/signup/signup.component';
 
 const routes: Routes = [
   {
-    path: "home",
+    path: "",
     component: HomeComponent
   },
   {
@@ -45,7 +46,17 @@ const routes: Routes = [
       },
       {
         path: "userReviews",
-        component: UserReviewsComponent
+        children: [
+          {
+            path: "",
+            pathMatch: "full",
+            component: UserReviewsComponent
+          },
+          {
+            path: ":reviewId",
+            component: ReviewComponent
+          }
+        ]
       }
     ]
   }

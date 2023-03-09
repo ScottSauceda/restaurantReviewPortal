@@ -10,11 +10,36 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class UserProfileComponent implements OnInit {
 
-  profileID!: string|null;
+  // booleans
   profileLoaded: boolean = false;
-  profile!: Profile;
+  editing: boolean = false;
 
-  constructor(private userService: UserService, private route: ActivatedRoute, private router: Router) { }
+  // id's
+  profileID!: string|null;
+
+  // update inputs
+  email!: string|null;
+  phone!: string|null;
+  firstName!: string|null;
+  lastName!: string|null;
+
+
+  // models
+  profile!: Profile;
+  editedProfile!: Profile;
+
+
+  constructor(private userService: UserService, private route: ActivatedRoute, private router: Router) { 
+    this.editedProfile = {
+      usersId : 0,
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      userName: "",
+      isActive: true,
+    }
+  }
 
   ngOnInit(): void {
 
@@ -50,6 +75,57 @@ export class UserProfileComponent implements OnInit {
 
     })
 
+  }
+
+  loadEditPage(){
+    console.log("Load Edit Page Clicked");
+    this.editing = true;
+  }
+
+  sendEdit(){
+    console.log("Send Edit Button Clicked");
+
+    if(this.email == null){
+      this.editedProfile.email = this.profile.email;
+    } else {
+      this.editedProfile.email = this.email;
+    }
+
+    if(this.phone == null){
+      this.editedProfile.phone = this.profile.email;      
+    } else {
+      this.editedProfile.phone = this.phone;
+    }
+
+    if(this.firstName == null){
+      this.editedProfile.firstName = this.profile.firstName;      
+    } else {
+      this.editedProfile.firstName = this.firstName;
+    }
+
+    if(this.lastName == null){
+      this.editedProfile.lastName = this.profile.lastName
+    } else {
+      this.editedProfile.lastName = this.lastName;
+    }
+
+    this.editedProfile.usersId = this.profile.usersId;
+    this.editedProfile.userName = this.profile.userName;
+
+    console.log("sending to update profile");
+    console.log(this.editedProfile);
+    
+    this.userService.updateProfile(this.profile.usersId, this.editedProfile);
+
+  }
+
+  cancelEdit(){
+    this.editing = false;
+    console.log("Cancel Edit Button Clicked");
+  }
+
+  changeAccountStatus(){
+    console.log("Change Account Status Button Clicked");
   }
 
 }

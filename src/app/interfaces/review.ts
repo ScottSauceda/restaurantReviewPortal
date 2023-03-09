@@ -1,7 +1,7 @@
 export interface Review {
     reviewId: number;
     rating: number;
-    timeCreated: Date;
+    timeCreated?: Date;
     reviewText: String;
     userId: number; 
 }

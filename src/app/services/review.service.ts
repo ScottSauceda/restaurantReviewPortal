@@ -1,15 +1,21 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { RestaurantReview } from '../interfaces/restaurant-review';
 import { Review } from '../interfaces/review';
 import { environment } from 'src/environments/environment';
+import { NewReview } from '../interfaces/new-review';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReviewService {
 
-  constructor(private httpClient: HttpClient) {}
+  createSuccessful:boolean = false;
+  editSuccessful: boolean = false;
+  deleteSuccessful: boolean = false;
+
+  constructor(private httpClient: HttpClient, private router: Router) {}
 
   // getAllRestaurantReviews(restaurantId: String){
   //   console.log("getting all restaurant reviews")
@@ -23,6 +29,63 @@ export class ReviewService {
 
   getReviewsByUser(userId: string){
     return this.httpClient.get<Review[]>(environment.basePath + "/review/reviews/" + userId);
+  }
+
+  addReview(newReview: NewReview){
+    let headers = new HttpHeaders({
+      'Access-Control-Allow-Origin': '*'      
+    })
+
+    this.httpClient.post<NewReview>(environment.basePath + "/review/create", newReview, {observe: "response", headers: headers})
+    .subscribe({
+      next: (response) => {
+        if(response){
+          this.createSuccessful = true;
+        }
+        window.location.reload;
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error.message);
+        this.router.navigate(["../"]);
+      }
+    })
+  }
+
+  getSelectedReview(reviewId: String){
+    return this.httpClient.get<Review>(environment.basePath + "/review/" + reviewId);
+  }
+
+  updateReview(reviewId: number, editedReview: Review){
+    return this.httpClient.put<Review>(environment.basePath + "/review/update/" + reviewId, editedReview, {observe: "response"})
+    .subscribe({
+      next: (response) => {
+        if(response){
+          this.editSuccessful = true;
+        }
+        window.location.reload;
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error.message);
+        this.router.navigate(["../"]);
+      }
+    })
+  }
+
+  deleteReview(reviewId: number){
+    console.log("deleting review")
+    return this.httpClient.delete(environment.basePath + "/review/delete/" + reviewId, {observe: "response"})
+    .subscribe({
+      next: (response) => {
+        if(response){
+          this.deleteSuccessful = true;
+        }
+        // window.location.reload;
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error.message);
+        this.router.navigate(["../"]);
+      }
+    })
   }
 
 

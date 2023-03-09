@@ -9,13 +9,12 @@
         <div class = "d-flex justify-content-center" *ngIf="!reviewsLoaded">
             <div class="spinner-border"></div>
         </div>
+        <div>
+            <div>No Reviews to Display. We look forward to your first review with us!</div>
+        </div>
         <div class="flex-column" style="border: 2px solid red; padding: 1rem;">
             User {{usersID}} Reviews:
-            <div *ngFor="let review of allReviews" reviewData="review">
-                <div style="padding: 1em; border: 2px solid blue;">
-                    <h5>Review text: {{review.reviewText}}</h5>
-                </div>
-            </div>
+            <app-review-card *ngFor="let review of allReviews" [reviewData]="review" ></app-review-card>
         </div>
     </div>
 </div>

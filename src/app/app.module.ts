@@ -1,9 +1,9 @@
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 
 import { FooterComponent } from './components/footer/footer.component';
@@ -15,13 +15,25 @@ import { RestaurantsComponent } from './pages/browsing/restaurants/restaurants.c
 import { RestaurantReviewsComponent } from './pages/browsing/restaurant-reviews/restaurant-reviews.component';
 import { UserProfileComponent } from './pages/dashboard/user-profile/user-profile.component';
 import { UserReviewsComponent } from './pages/dashboard/user-reviews/user-reviews.component';
-import { RestaurantCardComponent } from './cards/restaurant-card/restaurant-card.component';
+import { RestaurantCardComponent } from './components/cards/restaurant-card/restaurant-card.component';
+import { DatePipe } from '@angular/common';
+import { ReviewComponent } from './pages/dashboard/review/review.component';
+import { ReviewCardComponent } from './components/cards/review-card/review-card.component';
+
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+// import {MatStepperModule} from '@angular/material/stepper';
+// import {MatInputModule} from '@angular/material/input';
+// import {MatButtonModule} from '@angular/material/button';
+// import {MatListModule} from '@angular/material/list';
+
 
 
 @NgModule({
   declarations: [
     AppComponent,
     FooterComponent,
+    // FormsModule,
     HeaderComponent,
     HomeComponent,
     LoginComponent,
@@ -31,6 +43,8 @@ import { RestaurantCardComponent } from './cards/restaurant-card/restaurant-card
     UserProfileComponent,
     UserReviewsComponent,
     RestaurantCardComponent,
+    ReviewComponent,
+    ReviewCardComponent,
   ],
   imports: [
     BrowserModule,
@@ -39,7 +53,9 @@ import { RestaurantCardComponent } from './cards/restaurant-card/restaurant-card
     FormsModule,
     NgbModule
   ],
-  providers: [],
+  providers: [
+    DatePipe
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

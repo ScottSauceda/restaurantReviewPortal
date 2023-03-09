@@ -1,9 +1,9 @@
 export interface Profile {
-    users_Id: number;
+    usersId: number;
     userName: String;
-    first_name: String;
-    last_name: String;
+    firstName: String;
+    lastName: String;
     email: String;
-    phone_number: String;
+    phone: String;
     isActive: Boolean;
 }
