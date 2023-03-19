@@ -1,3 +1,5 @@
+import { Image } from "./image";
+
 export interface Profile {
     usersId: number;
     userName: String;
@@ -6,4 +8,5 @@ export interface Profile {
     email: String;
     phone: String;
     isActive: Boolean;
+    profileImage?: Image;
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Profile } from 'src/app/interfaces/profile';
 import { UserService } from 'src/app/services/user.service';
+import { Image } from 'src/app/interfaces/image';
 
 @Component({
   selector: 'app-user-profile',
@@ -13,6 +14,7 @@ export class UserProfileComponent implements OnInit {
   // booleans
   profileLoaded: boolean = false;
   editing: boolean = false;
+  addingPhoto: boolean = false;
 
   // id's
   profileID!: string|null;
@@ -23,10 +25,13 @@ export class UserProfileComponent implements OnInit {
   firstName!: string|null;
   lastName!: string|null;
 
+  imgSrc!: string;
+  imgName!: string;
 
   // models
   profile!: Profile;
   editedProfile!: Profile;
+  newImage!: Image; 
 
 
   constructor(private userService: UserService, private route: ActivatedRoute, private router: Router) { 
@@ -38,6 +43,13 @@ export class UserProfileComponent implements OnInit {
       phone: "",
       userName: "",
       isActive: true,
+    }
+
+    this.newImage = {
+      imgName: "",
+      imgSrc: "",
+      imgType: "profile",
+      usersId: 0
     }
   }
 
@@ -62,6 +74,10 @@ export class UserProfileComponent implements OnInit {
         console.log("calling user profile");
         this.userService.getUserProfile(this.profileID).subscribe((data: Profile) => {
           if(data){
+
+            console.log("data returned for profile");
+            console.log(data);
+
             this.profileLoaded = true;
             this.profile = data;
 
@@ -74,8 +90,8 @@ export class UserProfileComponent implements OnInit {
       
 
     })
-
   }
+
 
   loadEditPage(){
     console.log("Load Edit Page Clicked");
@@ -126,6 +142,66 @@ export class UserProfileComponent implements OnInit {
 
   changeAccountStatus(){
     console.log("Change Account Status Button Clicked");
+
+    this.editedProfile.usersId = this.profile.usersId;
+    this.editedProfile.userName = this.profile.userName;
+    this.editedProfile.firstName = this.profile.firstName;
+    this.editedProfile.lastName = this.profile.lastName;
+    this.editedProfile.email = this.profile.email;
+    this.editedProfile.phone = this.profile.phone;
+
+    if(this.profile.isActive == true){
+      this.editedProfile.isActive = false;
+    } else {
+      this.editedProfile.isActive = true;
+    }
+
+    console.log("sending editedProfile");
+    console.log(this.editedProfile);
+
+    this.userService.updateActiveStatus(this.editedProfile);
+  }
+
+
+  addPhoto(){
+    console.log("add photo button clicked");
+    this.addingPhoto = true;
+  }
+
+  sendPhoto(){
+    console.log("send photo button clicked");
+
+
+    this.newImage.usersId = this.profile.usersId;
+
+    if(this.imgName == null){
+      this.newImage.imgName = "namewasnull";
+    } else {
+      this.newImage.imgName = this.imgName;
+    }
+
+    if(this.imgSrc == null){
+      this.newImage.imgSrc = "sourcwasnull";
+    } else {
+      this.newImage.imgSrc = this.imgSrc;
+    }
+
+
+    console.log("image to be sent for addPhoto");
+    console.log(this.newImage);
+
+      this.userService.addProfilePhoto(this.newImage);
+  }
+
+  cancelAddPhoto(){
+    this.addingPhoto = false;
+    console.log("add photo button clicked");
+  }
+
+
+  deletePhoto(){
+    console.log("delete photo button clicked");
+    this.userService.deleteProfilePhoto(this.profile.profileImage?.imgId || 100);
   }
 
 }

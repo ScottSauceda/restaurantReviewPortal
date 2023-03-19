@@ -10,6 +10,14 @@ export class HomeComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    console.log('session: loginStatus');
+    console.log(sessionStorage.getItem('userLoginStatus'));
+
+    console.log('session: userId');
+    console.log(sessionStorage.getItem('userId'));
+    
+    console.log('session: username');
+    console.log(sessionStorage.getItem('username'));
   }
 
 }

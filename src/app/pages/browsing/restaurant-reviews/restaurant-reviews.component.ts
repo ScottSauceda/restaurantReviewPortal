@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RestaurantReview } from 'src/app/interfaces/restaurant-review';
 import { DatePipe } from '@angular/common';
 import { NewReview } from 'src/app/interfaces/new-review';
 import { Review } from 'src/app/interfaces/review';
+import { Image } from 'src/app/interfaces/image';
 import { Restaurant } from 'src/app/interfaces/restaurant';
 import { RestaurantService } from 'src/app/services/restaurant.service';
 import { ReviewService } from 'src/app/services/review.service';
@@ -18,6 +18,7 @@ export class RestaurantReviewsComponent implements OnInit {
   // booleans
   reviewsLoaded: boolean = false;
   adding: boolean = false;
+  sessionActive: boolean = false;
 
   // id's
   restaurantID!: string|null;
@@ -28,6 +29,7 @@ export class RestaurantReviewsComponent implements OnInit {
 
   // models
   allReviews: Review[] = [];
+  allImages: Image[] = [];
   restaurant!: Restaurant;
   newReview!: NewReview;
 
@@ -74,12 +76,29 @@ export class RestaurantReviewsComponent implements OnInit {
 
             console.log("all reviews");
             console.log(this.allReviews);
+
+            for(let i = 0; i < this.restaurant.restaurantImages.length; i++){
+              this.allImages.push(this.restaurant.restaurantImages[i]);
+              console.log(this.restaurant.restaurantImages[i].imgName);
+            }
+
+            console.log("all reviews");
+            console.log(this.allImages);
           }
         })
       
       
       }
     })
+
+    if(sessionStorage.getItem('userLoginStatus') == 'true'){
+      console.log("session is active");
+      this.sessionActive = true;
+      // this.userID = sessionStorage.getItem('userId');
+    } else {
+      console.log("session is not active");
+    }
+
   }
 
   sendReview(){
@@ -100,7 +119,7 @@ export class RestaurantReviewsComponent implements OnInit {
     console.log("sending to add review");
     console.log(this.newReview);
 
-    this.reviewService.addReview(this.newReview);
+    this.reviewService.addReview(this.newReview, this.restaurant.restaurantId);
 
   }
   

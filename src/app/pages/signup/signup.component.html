@@ -1,19 +1,70 @@
-<div class="d-flex flex-wrap align-content-center justify-content-center">
-    <div>
-        <p>Username:</p>
-        <!-- <input type="text" placeholder="username" id="username" name="username" [(ngmodel)]="username" /> -->
-        <input type="text" placeholder="username" id="username" name="username"/>
+<h3>Sign Up</h3>
+<mat-horizontal-stepper [linear]="isLinear" #stepper >
+    <mat-step [stepControl]="firstFormGroup">
+        <form [formGroup]="firstFormGroup">
+            <ng-template matStepLabel="">User</ng-template>
+            <br/>
+            <br/>
+            <mat-form-field>
+                <label for="username" class="form-label">Username</label>
+                <input matInput id="username" formControlName="username" required>
+            </mat-form-field>
+            <br/>
+            <br/>
+            <mat-form-field>
+                <label for="password" class="form-label">Password</label>
+                <input matInput id="password" formControlName="password" type="password" required>
+            </mat-form-field>
+            <br/>
+            <div>
+                <button mat-button matStepperNext>Next</button>
+            </div>
+        </form>
+    </mat-step>
 
-        <p>Password: </p>
-        <!-- <input type="text" placeholder="password" id="password" name="password" [(ngmodel)]="password" /> -->
-        <input type="text" placeholder="password" id="password" name="password"/>
-    </div>    
-</div>
+    <mat-step [stepControl]="secondFormGroup">
+        <form [formGroup]="secondFormGroup">
+            <ng-template matStepLabel>User Profile</ng-template>
+            <mat-form-field>
+                <label for="email" class="form-label">Email</label>
+                <input matInput id="email" formControlName="email" type="email" required>
+            </mat-form-field>
+            <br/>
+            <br/>
+            <mat-form-field>
+                <label for="phone" class="form-label">Phone</label>
+                <input matInput id="phone" formControlName="phone" type="phone" >
+            </mat-form-field>
+            <br/>
+            <br/>
+            <mat-form-field>
+                <label for="firstName" class="form-label">First Name</label>
+                <input matInput id="firstName" formControlName="firstName" type="firstName" >
+            </mat-form-field>
+            <br/>
+            <br/>
+            <mat-form-field>
+                <label for="lastName" class="lastName">Last Name</label>
+                <input matInput id="lastName" formControlName="lastName" type="lastName" >
+            </mat-form-field>
+            <br/>
+            <div>
+                <button mat-button matStepperPrevious>Back</button>
+                <button mat-button matStepperNext>Next</button>
+            </div>
+        </form>
+    </mat-step>
 
-    <!-- <div *ngIf="!editing && !orderCanceled"> -->
+    <mat-step>
+        <ng-template matStepLabel>Done</ng-template>
+        <p>You are now done.</p>
+        <mat-list>
+            
+        </mat-list>
         <div>
-            <!-- <button class="btn btn-primary m-2 mb-3" (click)="loadEditPage()">Edit Review</button> -->
-            <button class="btn btn-primary m-2 mb-3" (click)="signUp()">Sign Up</button>
-
-            <!-- <button class="btn btn-primary m-2 mb-3">Forgot Password</button> -->
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button (click)="stepper.reset()">Reset</button>
+            <button mat-button (click)="submit()" >Submit</button>
         </div>
+    </mat-step>
+</mat-horizontal-stepper>

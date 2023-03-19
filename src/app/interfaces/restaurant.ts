@@ -1,15 +1,16 @@
 import { Review } from "./review";
+import { Image } from "./image";
 
 export interface Restaurant {
     restaurantId: number;
-    location_id: number;
-    owner_id: number;
+    ownerId: number;
     name: String;
-    location_name: String;
     address: String;
     city: String;
     state: String;
-    zip_code: number;
-    owner_name: String;
+    zipCode: number;
+    ownerName: String;
     restaurantReviews: Review[];
+    restaurantImages: Image[];
+
 }

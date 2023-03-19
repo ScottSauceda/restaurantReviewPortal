@@ -22,10 +22,10 @@ import { ReviewCardComponent } from './components/cards/review-card/review-card.
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-// import {MatStepperModule} from '@angular/material/stepper';
-// import {MatInputModule} from '@angular/material/input';
-// import {MatButtonModule} from '@angular/material/button';
-// import {MatListModule} from '@angular/material/list';
+import {MatStepperModule} from '@angular/material/stepper';
+import {MatInputModule} from '@angular/material/input';
+import {MatButtonModule} from '@angular/material/button';
+import {MatListModule} from '@angular/material/list';
 
 
 
@@ -33,7 +33,6 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
   declarations: [
     AppComponent,
     FooterComponent,
-    // FormsModule,
     HeaderComponent,
     HomeComponent,
     LoginComponent,
@@ -47,10 +46,16 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     ReviewCardComponent,
   ],
   imports: [
-    BrowserModule,
     AppRoutingModule,
-    HttpClientModule,
+    BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
+    HttpClientModule,
+    MatButtonModule,
+    MatInputModule,
+    MatListModule,
+    MatStepperModule,
+    ReactiveFormsModule,
     NgbModule
   ],
   providers: [

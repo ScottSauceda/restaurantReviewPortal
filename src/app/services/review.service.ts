@@ -31,20 +31,22 @@ export class ReviewService {
     return this.httpClient.get<Review[]>(environment.basePath + "/review/reviews/" + userId);
   }
 
-  addReview(newReview: NewReview){
+  addReview(newReview: NewReview, restaurantId: number){
     let headers = new HttpHeaders({
       'Access-Control-Allow-Origin': '*'      
     })
 
-    this.httpClient.post<NewReview>(environment.basePath + "/review/create", newReview, {observe: "response", headers: headers})
+    this.httpClient.post<NewReview>(environment.basePath + "/review/create/" + restaurantId, newReview, {observe: "response", headers: headers})
     .subscribe({
       next: (response) => {
         if(response){
           this.createSuccessful = true;
+          console.log("review created successfully");
         }
-        window.location.reload;
+        // window.location.reload;
       },
       error: (error: HttpErrorResponse) => {
+        console.log("error occured");
         console.log(error.message);
         this.router.navigate(["../"]);
       }
