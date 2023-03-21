@@ -28,17 +28,19 @@
             </div>
         </div>
         <div>
-            <div class="border border-primary fill">&nbsp; |||||||||</div>
+            <div class="border border-primary fill">&nbsp; ============================= </div>
         </div>
         <div class="flex-column" style="border: 2px solid red; padding: 1rem;">
             Restaurant Reviews:
             <div *ngFor="let review of restaurant.restaurantReviews" reviewData="review">
                 <div style="padding: 1em; border: 2px solid blue;">
                     <h5>User Id: {{review.userId}}</h5>
-                    <h5>User Name: ?</h5>
+                    <h5>User Name: {{review.userName}}</h5>
                     <h6>Review Date: {{review.timeCreated}}</h6>
                     <h6>Review rating: {{review.rating}}/5</h6>
                     <h6>Review text: {{review.reviewText}}</h6>
+                    <button *ngIf="review.userId == sessionId" class="btn btn-primary m-2 mb-3" (click)="editReview()" >Edit Review</button>
+                    <button *ngIf="review.userId == sessionId" class="btn btn-primary m-2 mb-3" (click)="deleteReview()">Delete Review</button>
                 </div>
             </div>
         </div>
@@ -69,8 +71,8 @@
         <button class="btn btn-primary m-2 mb-3" (click)="addReview()">Add Review</button>
     </div>
     <div *ngIf="adding">
-        <button class="btn btn-primary m-2 mb-3" (click)="sendReview()" >Send Review</button>
-        <button class="btn btn-primary m-2 mb-3"  (click)="cancelReview()">Cancel Review</button>
+        <button class="btn btn-primary m-2 mb-3" (click)="sendAddReview()" >Send Review</button>
+        <button class="btn btn-primary m-2 mb-3"  (click)="cancelAddReview()">Cancel Review</button>
         <!-- <button class="btn btn-primary m-2 mb-3" (click)="changeAccountStatus()" >Deactivate Account</button> -->
     </div>
 

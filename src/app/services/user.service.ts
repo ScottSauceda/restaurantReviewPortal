@@ -19,12 +19,8 @@ export class UserService {
 
   constructor(private httpClient: HttpClient, private router: Router) { }
 
-  getUserProfile(userId: string) {
-    return this.httpClient.get<Profile>(environment.basePath + "/user/" + userId);
-  }
-
+  // Sign Up
   createUser(newProfile: NewProfile){
-
     this.httpClient.post<NewProfile>(environment.basePath + "/user/create", newProfile, {observe: "response"})
     .subscribe({
       next: (response) => {
@@ -37,11 +33,35 @@ export class UserService {
         console.log(error.message);
       }    
     })
+  }
 
+  // Login
+  login(user: Credential){
+
+    console.log("user to be sent to login");
+    console.log(user);
+
+    return this.httpClient.post<User>(environment.basePath + "/user/login", user);
+    // this.httpClient.post<Credential>(environment.basePath + "/user/login", user, {observe: "response"})
+    // .subscribe({
+    //   next: (response) => {
+    //     if(response){
+    //       console.log("Response was ok");
+    //       console.log(response);
+    //     }
+    //   },
+    //   error: (error: HttpErrorResponse) => {
+    //     console.log(error.message);
+    //   }     
+    // })
+  }
+
+
+  getUserProfile(userId: string) {
+    return this.httpClient.get<Profile>(environment.basePath + "/user/" + userId);
   }
   
   updateProfile(userId: number , editedProfile: Profile){
-
     // let headers = new HttpHeaders({
     //   // 'update': 'true'
     // })
@@ -88,29 +108,6 @@ export class UserService {
 
   }
 
-
-  login(user: Credential){
-
-    console.log("user to be sent to login");
-    console.log(user);
-
-    return this.httpClient.post<User>(environment.basePath + "/user/login", user);
-
-    // this.httpClient.post<Credential>(environment.basePath + "/user/login", user, {observe: "response"})
-    // .subscribe({
-    //   next: (response) => {
-    //     if(response){
-    //       console.log("Response was ok");
-    //       console.log(response);
-    //     }
-    //   },
-    //   error: (error: HttpErrorResponse) => {
-    //     console.log(error.message);
-    //   }     
-    // })
-  }
-
-
   addProfilePhoto(newImage: Image){
     console.log("image being sent");
     console.log(newImage);
@@ -131,7 +128,6 @@ export class UserService {
 
 
   deleteProfilePhoto(imageId: number){
-
     console.log("id of image to be deleted");
     console.log(imageId);
 

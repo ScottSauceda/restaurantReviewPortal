@@ -19,11 +19,13 @@ export class RestaurantReviewsComponent implements OnInit {
   reviewsLoaded: boolean = false;
   adding: boolean = false;
   sessionActive: boolean = false;
+  sessionId!: number;
 
   // id's
   restaurantID!: string|null;
 
   // inputs
+  // userId!: string;
   rating!: number;
   reviewText!: string;
 
@@ -44,21 +46,25 @@ export class RestaurantReviewsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    this.sessionId = Number(sessionStorage.getItem('userId'));
+    console.log('this.sessioId');
+    console.log(this.sessionId);
     
     console.log("ng on init calling getAllRestaurantReviews: ");
     this.route.paramMap.subscribe(params => {
       
-      console.log("params: " + params.get("restaurantId"));
-      console.log("here 1");
+      // console.log("params: " + params.get("restaurantId"));
+      // console.log("here 1");
 
       this.restaurantID = params.get("restaurantId");
       this.reviewsLoaded = false;
 
-      console.log("here 2");
-      console.log(this.restaurantID);
+      // console.log("here 2");
+      // console.log(this.restaurantID);
       
       if(this.restaurantID){
-        console.log("here 3");
+        // console.log("here 3");
 
         console.log("calling restaurant");
         this.restaurantService.getRestaurantById(this.restaurantID).subscribe((data: Restaurant) => {
@@ -71,19 +77,34 @@ export class RestaurantReviewsComponent implements OnInit {
 
             for(let i = 0; i < this.restaurant.restaurantReviews.length; i++){
               this.allReviews.push(this.restaurant.restaurantReviews[i]);
-              console.log(this.restaurant.restaurantReviews[i].reviewText)
+
+              console.log("review userId")
+              console.log(this.restaurant.restaurantReviews[i].userId.toString());
+
+              if(this.sessionId == this.restaurant.restaurantReviews[i].userId){
+                console.log("userId and sessionId match, display Edit and Delete button");
+              } else {
+                console.log("id's do not match, do not display edit and delete button");
+              }
+              
+              // console.log(this.restaurant.restaurantReviews[i].reviewText)
             }
 
-            console.log("all reviews");
-            console.log(this.allReviews);
+            // console.log("all reviews");
+            // console.log(this.allReviews);
 
             for(let i = 0; i < this.restaurant.restaurantImages.length; i++){
               this.allImages.push(this.restaurant.restaurantImages[i]);
               console.log(this.restaurant.restaurantImages[i].imgName);
             }
 
-            console.log("all reviews");
-            console.log(this.allImages);
+            // console.log("all images");
+            // console.log(this.allImages);
+
+
+            console.log("session storage userId");
+            console.log(sessionStorage.getItem('userId'));
+
           }
         })
       
@@ -94,21 +115,23 @@ export class RestaurantReviewsComponent implements OnInit {
     if(sessionStorage.getItem('userLoginStatus') == 'true'){
       console.log("session is active");
       this.sessionActive = true;
-      // this.userID = sessionStorage.getItem('userId');
+      // const loggedInUserId = sessionStorage.getItem('userId');
+      // this.userId = JSON.parse(sessionStorage.getItem('userId')!);
     } else {
       console.log("session is not active");
     }
 
   }
 
-  sendReview(){
+  sendAddReview(){
     console.log("Send Review Button Clicked");
 
     this.newReview.rating = this.rating;
 
     this.newReview.reviewText = this.reviewText;
 
-    this.newReview.userId = 11;
+    this.newReview.userId = JSON.parse(sessionStorage.getItem('userId')!);
+
 
     const dateString = this.datePipe.transform(Date.now(), 'YYYY-MM-dd hh:mm:ss');
     console.log(dateString);
@@ -129,11 +152,25 @@ export class RestaurantReviewsComponent implements OnInit {
     console.log("Add Review Button Clicked");    
   }
 
-  cancelReview(){
+  cancelAddReview(){
     this.adding = false;
     console.log("Cancel Review Button Clicked");
   }
 
+
+
+  editReview(){
+    console.log('Edit Review Button Clicked');
+  }
+
+  cancelEditReview(){
+    this.adding = false;
+    console.log("Cancel Review Button Clicked");
+  }
+
+  deleteReview(){
+    console.log("Delete Review Button Clicked");
+  }
   
 
 }
