@@ -37,8 +37,9 @@ export class UserReviewsComponent implements OnInit {
         this.reviewService.getReviewsByUser(this.usersID).subscribe((data: Review[]) => {
           if(data){
             this.reviewsLoaded = true;
-            this.allReviews = [...data];
 
+            this.allReviews = [...data];
+    
             console.log("all review");
             console.log(this.allReviews);
           }

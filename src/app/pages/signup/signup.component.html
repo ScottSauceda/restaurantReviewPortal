@@ -1,19 +1,19 @@
 <h3>Sign Up</h3>
 <mat-horizontal-stepper [linear]="isLinear" #stepper >
-    <mat-step [stepControl]="firstFormGroup">
+    <mat-step [stepControl]="firstFormGroup" label="User">
         <form [formGroup]="firstFormGroup">
-            <ng-template matStepLabel="">User</ng-template>
+            <!-- <ng-template matStepLabel></ng-template> -->
             <br/>
             <br/>
             <mat-form-field>
                 <label for="username" class="form-label">Username</label>
-                <input matInput id="username" formControlName="username" required>
+                <input matInput id="username" formControlName="username" class="border border-dark" required>
             </mat-form-field>
             <br/>
             <br/>
             <mat-form-field>
                 <label for="password" class="form-label">Password</label>
-                <input matInput id="password" formControlName="password" type="password" required>
+                <input matInput id="password" formControlName="password" type="password" class="border border-dark" required>
             </mat-form-field>
             <br/>
             <div>
@@ -22,30 +22,30 @@
         </form>
     </mat-step>
 
-    <mat-step [stepControl]="secondFormGroup">
+    <mat-step [stepControl]="secondFormGroup"  label="Profile">
         <form [formGroup]="secondFormGroup">
-            <ng-template matStepLabel>User Profile</ng-template>
+            <!-- <ng-template matStepLabel></ng-template> -->
             <mat-form-field>
                 <label for="email" class="form-label">Email</label>
-                <input matInput id="email" formControlName="email" type="email" required>
+                <input matInput id="email" formControlName="email" type="email" class="border border-dark" required>
             </mat-form-field>
             <br/>
             <br/>
             <mat-form-field>
                 <label for="phone" class="form-label">Phone</label>
-                <input matInput id="phone" formControlName="phone" type="phone" >
+                <input matInput id="phone" formControlName="phone" type="phone" class="border border-dark" >
             </mat-form-field>
             <br/>
             <br/>
             <mat-form-field>
                 <label for="firstName" class="form-label">First Name</label>
-                <input matInput id="firstName" formControlName="firstName" type="firstName" >
+                <input matInput id="firstName" formControlName="firstName" type="firstName" class="border border-dark" >
             </mat-form-field>
             <br/>
             <br/>
             <mat-form-field>
-                <label for="lastName" class="lastName">Last Name</label>
-                <input matInput id="lastName" formControlName="lastName" type="lastName" >
+                <label for="lastName" class="form-label">Last Name</label>
+                <input matInput id="lastName" formControlName="lastName" type="lastName" class="border border-dark" >
             </mat-form-field>
             <br/>
             <div>
@@ -55,11 +55,17 @@
         </form>
     </mat-step>
 
-    <mat-step>
-        <ng-template matStepLabel>Done</ng-template>
+    <mat-step  label="Done">
+        <!-- <ng-template matStepLabel></ng-template> -->
         <p>You are now done.</p>
         <mat-list>
+            <mat-list-item> <strong>User Name:</strong> {{ this.firstFormGroup.value.username }}</mat-list-item>
+            <mat-list-item> <strong>Password:</strong> {{ this.firstFormGroup.value.password }}</mat-list-item>
             
+            <mat-list-item> <strong>Email:</strong> {{ this.secondFormGroup.value.email }}</mat-list-item>
+            <mat-list-item> <strong>Phone:</strong> {{ this.secondFormGroup.value.phone }}</mat-list-item>
+            <mat-list-item> <strong>First Name:</strong> {{ this.secondFormGroup.value.firstName }}</mat-list-item>
+            <mat-list-item> <strong>Last Name:</strong> {{ this.secondFormGroup.value.lastName }}</mat-list-item>
         </mat-list>
         <div>
             <button mat-button matStepperPrevious>Back</button>
@@ -68,3 +74,6 @@
         </div>
     </mat-step>
 </mat-horizontal-stepper>
+<div *ngIf="errorOccured"  class="text-center text-danger">
+    &nbsp;{{signupMessage}}. Please try again.
+</div>

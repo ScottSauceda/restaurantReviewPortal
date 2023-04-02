@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-header',
@@ -9,7 +10,7 @@ export class HeaderComponent implements OnInit {
 
   sessionActive: boolean = false;
 
-  constructor() { }
+  constructor(private userService: UserService) { }
 
   userID!: string|null;
 
@@ -38,7 +39,10 @@ export class HeaderComponent implements OnInit {
   logout(){
     console.log("logging out");
     sessionStorage.clear();
-    window.location.replace("index.html");
+    this.userService.logout();
+    // window.location.replace("index.html");
+    
+    
   }
 
 }

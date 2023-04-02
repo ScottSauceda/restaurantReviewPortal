@@ -11,7 +11,6 @@ import { ReviewService } from 'src/app/services/review.service';
 export class ReviewComponent implements OnInit {
 
   // booleans
-  orderCanceled: boolean = false;
   editing: boolean = false;
   reviewLoaded: boolean = false;
   
@@ -89,7 +88,7 @@ export class ReviewComponent implements OnInit {
 
   deleteReview(){
     console.log("Delete review button clicked");
-    this.reviewService.deleteReview(this.review.reviewId);
+    this.reviewService.deleteReview(this.review);
   }
 
 }

@@ -18,17 +18,27 @@ export class SignupComponent implements OnInit {
 
   newUser!: NewProfile;
 
+  errorOccured: boolean = false;
+  signupMessage!: string;
+
+  // firstFormGroup = this._formBuilder.group({
+  //   firstCtrl: ['', Validators.required],
+  // });
+  // secondFormGroup = this._formBuilder.group({
+  //   secondCtrl: ['', Validators.required],
+  // });
+  // isLinear = false;
+
 
   constructor(private _formBuilder: FormBuilder, private userService: UserService, private httpClient: HttpClient) { 
     this.newUser = {
-      userName: "",
+      username: "",
       password: "",
-      isActive: true,
+      role: ["user"],
       email: "",
       phone: "",
       firstName: "",
-      lastName: "",
-      roleId: 3
+      lastName: ""
     }
   }
 
@@ -63,7 +73,7 @@ export class SignupComponent implements OnInit {
     // }
     
 
-    this.newUser.userName = this.firstFormGroup.value.username;
+    this.newUser.username = this.firstFormGroup.value.username;
     this.newUser.password = this.firstFormGroup.value.password;
 
     this.newUser.email = this.secondFormGroup.value.email;
@@ -76,11 +86,19 @@ export class SignupComponent implements OnInit {
     console.log(this.newUser);
 
 
-    this.userService.createUser(this.newUser);
+    this.userService.createUser(this.newUser)
+    .subscribe(
+      (data: any) => {
+        console.log('HTTP response', data),
+        this.signupMessage = data;
+      },
+      err => {
+        console.log('HTTP Error', err.error),
+        this.errorOccured = true;
+        this.signupMessage = err.error;
+      }, 
+      () => console.log('HTTP request completed.')
+    );
 
   }
-
-
-
-
 }

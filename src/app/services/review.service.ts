@@ -58,36 +58,60 @@ export class ReviewService {
   }
 
   updateReview(reviewId: number, editedReview: Review){
-    return this.httpClient.put<Review>(environment.basePath + "/review/update/" + reviewId, editedReview, {observe: "response"})
-    .subscribe({
-      next: (response) => {
-        if(response){
-          this.editSuccessful = true;
-        }
-        window.location.reload;
-      },
-      error: (error: HttpErrorResponse) => {
-        console.log(error.message);
-        this.router.navigate(["../"]);
-      }
-    })
+
+    console.log('reviewId to be sent');
+    console.log(reviewId);
+
+    console.log('editedReview to be sent');
+    console.log(editedReview);
+
+    const httpOptions = {
+      headers: new HttpHeaders({ 
+        'Accept': 'text/html',
+      }), 
+      responseType: 'text' as 'text',
+    };
+    
+
+    return this.httpClient.put(environment.basePath + "/review/update", editedReview, httpOptions)
+    // .subscribe({
+    //   next: (response) => {
+    //     if(response){
+    //       this.editSuccessful = true;
+    //     }
+    //     window.location.reload;
+    //   },
+    //   error: (error: HttpErrorResponse) => {
+    //     console.log(error.message);
+    //     this.router.navigate(["../"]);
+    //   }
+    // })
   }
 
-  deleteReview(reviewId: number){
+  deleteReview(deleteReview: Review){
     console.log("deleting review")
-    return this.httpClient.delete(environment.basePath + "/review/delete/" + reviewId, {observe: "response"})
-    .subscribe({
-      next: (response) => {
-        if(response){
-          this.deleteSuccessful = true;
-        }
-        // window.location.reload;
-      },
-      error: (error: HttpErrorResponse) => {
-        console.log(error.message);
-        this.router.navigate(["../"]);
-      }
-    })
+
+    const httpOptions = {
+      headers: new HttpHeaders({ 
+        'Accept': 'text/html',
+      }), 
+      responseType: 'text' as 'text',
+      body: deleteReview
+    };
+
+    return this.httpClient.delete(environment.basePath + "/review/delete", httpOptions)
+    // .subscribe({
+    //   next: (response) => {
+    //     if(response){
+    //       this.deleteSuccessful = true;
+    //     }
+    //     // window.location.reload;
+    //   },
+    //   error: (error: HttpErrorResponse) => {
+    //     console.log(error.message);
+    //     this.router.navigate(["../"]);
+    //   }
+    // })
   }
 
 

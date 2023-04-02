@@ -1,7 +1,4 @@
 <div class="container-lg">
-    <div id="return=holder" class="row m-1">
-        <a routerLink="../">Back</a>
-    </div>
     <div class="row">
         <div class="d-flex justify-content-center">
             <div class="d-flex justify-content-center" *ngIf="!profileLoaded">
@@ -42,6 +39,9 @@
             <p>Last Name: {{profile.lastName}}</p>
             <input type="text" placeholder="{{profile.lastName}}" id="lastName" name="lastName" [(ngModel)]="lastName" />
         </div>
+    </div>
+    <div *ngIf="updateSuccessful">
+        <div>{{updateMessage}}</div>
     </div>
 
     <div  *ngIf="addingPhoto && !editing">

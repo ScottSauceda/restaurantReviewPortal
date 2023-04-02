@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Profile } from 'src/app/interfaces/profile';
 import { UserService } from 'src/app/services/user.service';
 import { Image } from 'src/app/interfaces/image';
+import { catchError } from 'rxjs';
 
 @Component({
   selector: 'app-user-profile',
@@ -15,6 +16,7 @@ export class UserProfileComponent implements OnInit {
   profileLoaded: boolean = false;
   editing: boolean = false;
   addingPhoto: boolean = false;
+  updateSuccessful: boolean = false;
 
   // id's
   profileID!: string|null;
@@ -27,11 +29,13 @@ export class UserProfileComponent implements OnInit {
 
   imgSrc!: string;
   imgName!: string;
+  updateMessage!: string;
 
   // models
   profile!: Profile;
   editedProfile!: Profile;
   newImage!: Image; 
+  deleteImage: Image;
 
 
   constructor(private userService: UserService, private route: ActivatedRoute, private router: Router) { 
@@ -44,8 +48,14 @@ export class UserProfileComponent implements OnInit {
       userName: "",
       isActive: true,
     }
-
     this.newImage = {
+      imgName: "",
+      imgSrc: "",
+      imgType: "profile",
+      usersId: 0
+    }
+    this.deleteImage = {
+      imgId: 0,
       imgName: "",
       imgSrc: "",
       imgType: "profile",
@@ -72,7 +82,8 @@ export class UserProfileComponent implements OnInit {
         console.log("here 3");
 
         console.log("calling user profile");
-        this.userService.getUserProfile(this.profileID).subscribe((data: Profile) => {
+        this.userService.getUserProfile(this.profileID)
+        .subscribe((data: Profile) => {
           if(data){
 
             console.log("data returned for profile");
@@ -83,6 +94,10 @@ export class UserProfileComponent implements OnInit {
 
             console.log("profile - data");
             console.log(this.profile);
+
+
+          } else {
+            console.log("data could not be loaded. something went wrong");
           }
         })
 
@@ -108,7 +123,7 @@ export class UserProfileComponent implements OnInit {
     }
 
     if(this.phone == null){
-      this.editedProfile.phone = this.profile.email;      
+      this.editedProfile.phone = this.profile.phone;      
     } else {
       this.editedProfile.phone = this.phone;
     }
@@ -131,7 +146,42 @@ export class UserProfileComponent implements OnInit {
     console.log("sending to update profile");
     console.log(this.editedProfile);
     
-    this.userService.updateProfile(this.profile.usersId, this.editedProfile);
+    this.userService.updateProfile(this.profile.usersId, this.editedProfile)
+    // .pipe(
+    //   catchError((err, caught) => {
+    //     return err.nessage;
+    //   })
+    // )
+    .subscribe(
+      res => {
+        console.log('HTTP response', res),
+        this.updateMessage = res;
+      },
+      err => {
+        console.log('HTTP Error', err.error),
+        this.updateMessage = err.error;
+      }, 
+      () => console.log('HTTP request completed.')
+    );
+
+    // .subscribe((data: any) => {
+    //   if(data){
+
+    //     console.log("data returned for update profile");
+    //     console.log(data);
+
+    //     this.updateMessage = data;
+
+
+    //   } else {
+    //     console.log("update profile data not returned");
+
+    //   }
+    // })
+
+
+
+    this.updateSuccessful = true;
 
   }
 
@@ -190,7 +240,23 @@ export class UserProfileComponent implements OnInit {
     console.log("image to be sent for addPhoto");
     console.log(this.newImage);
 
-      this.userService.addProfilePhoto(this.newImage);
+    this.userService.addProfilePhoto(this.newImage)
+    .subscribe(
+      res => {
+        console.log('HTTP response', res),
+        this.updateMessage = res;
+      },
+      err => {
+        console.log('HTTP Error', err.error),
+        this.updateMessage = err.error;
+      }, 
+      () => console.log('HTTP request completed.')
+    );
+
+
+
+    console.log("finished adding profile pic");
+
   }
 
   cancelAddPhoto(){
@@ -201,7 +267,28 @@ export class UserProfileComponent implements OnInit {
 
   deletePhoto(){
     console.log("delete photo button clicked");
-    this.userService.deleteProfilePhoto(this.profile.profileImage?.imgId || 100);
-  }
 
+    this.deleteImage.imgId = this.profile.profileImage!.imgId;
+    this.deleteImage.imgName = this.profile.profileImage!.imgName;
+    this.deleteImage.imgSrc = this.profile.profileImage!.imgSrc;
+    this.deleteImage.imgType = this.profile.profileImage!.imgType;
+    this.deleteImage.usersId = this.profile.profileImage!.usersId;
+
+    this.userService.deleteProfilePhoto(this.deleteImage)
+    .subscribe(
+      res => {
+        console.log('HTTP response', res),
+        this.updateMessage = res;
+      },
+      err => {
+        console.log('HTTP Error', err.error),
+        this.updateMessage = err.error;
+      }, 
+      () => console.log('HTTP request completed.')
+    );
+
+
+
+    console.log("finished deleting profile pic");
+  }
 }

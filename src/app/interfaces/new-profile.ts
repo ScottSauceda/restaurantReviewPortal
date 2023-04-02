@@ -1,10 +1,9 @@
 export interface NewProfile {
-    userName: String;
+    username: String;
     password: String;
-    isActive: Boolean;
+    role: String[];
     email: String;
     phone: String;
     firstName: String;
     lastName: String;
-    roleId: number;
 }

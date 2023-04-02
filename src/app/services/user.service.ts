@@ -20,19 +20,25 @@ export class UserService {
   constructor(private httpClient: HttpClient, private router: Router) { }
 
   // Sign Up
-  createUser(newProfile: NewProfile){
-    this.httpClient.post<NewProfile>(environment.basePath + "/user/create", newProfile, {observe: "response"})
-    .subscribe({
-      next: (response) => {
-        if(response){
-          this.createSuccessful = true;
-        }
-        // this.router.navigate([""])
-      },
-      error: (error: HttpErrorResponse) => {
-        console.log(error.message);
-      }    
-    })
+  createUser(newProfile: NewProfile){    const httpOptions = {
+    headers: new HttpHeaders({ 
+      'Accept': 'text/html',
+    }), 
+    responseType: 'text' as 'text',
+  };
+
+   return this.httpClient.post(environment.basePath + "/user/signup", newProfile, httpOptions)
+    // .subscribe({
+    //   next: (response) => {
+    //     if(response){
+    //       this.createSuccessful = true;
+    //     }
+    //     // this.router.navigate([""])
+    //   },
+    //   error: (error: HttpErrorResponse) => {
+    //     console.log(error.message);
+    //   }    
+    // })
   }
 
   // Login
@@ -41,20 +47,25 @@ export class UserService {
     console.log("user to be sent to login");
     console.log(user);
 
-    return this.httpClient.post<User>(environment.basePath + "/user/login", user);
-    // this.httpClient.post<Credential>(environment.basePath + "/user/login", user, {observe: "response"})
-    // .subscribe({
-    //   next: (response) => {
-    //     if(response){
-    //       console.log("Response was ok");
-    //       console.log(response);
-    //     }
-    //   },
-    //   error: (error: HttpErrorResponse) => {
-    //     console.log(error.message);
-    //   }     
-    // })
+    return this.httpClient.post<User>(environment.basePath + "/auth/signin", user);
   }
+
+  logout(){
+    this.httpClient.post(environment.basePath + "/auth/signout", {observe: "response"})
+    .subscribe({
+        next: (response) => {
+          if(response){
+            this.updateSuccessful = true;
+          }
+          window.location.reload;
+        },
+        error: (error: HttpErrorResponse) => {
+          console.log(error.message);
+          // this.router.navigate(["../"]);
+        }
+    })  
+  }
+
 
 
   getUserProfile(userId: string) {
@@ -62,23 +73,31 @@ export class UserService {
   }
   
   updateProfile(userId: number , editedProfile: Profile){
-    // let headers = new HttpHeaders({
-    //   // 'update': 'true'
-    // })
+    const httpOptions = {
+      headers: new HttpHeaders({ 
+        'Accept': 'text/html',
+      }), 
+      responseType: 'text' as 'text',
+    };
 
-    this.httpClient.put<Profile>(environment.basePath + "/profile/update/" + userId, editedProfile, {observe: "response"})
-    .subscribe({
-      next: (response) => {
-        if(response){
-          this.updateSuccessful = true;
-        }
-        window.location.reload;
-      },
-      error: (error: HttpErrorResponse) => {
-        console.log(error.message);
-        // this.router.navigate(["../"]);
-      }
-    })
+    return this.httpClient.put(environment.basePath + "/profile/update", editedProfile, httpOptions)
+    // .subscribe({
+    //   next: (response) => {
+    //     if(response){
+    //       console.log('response');
+    //       console.log(response);
+    //       this.updateSuccessful = true;
+    //     }
+    //     // window.location.reload;
+    //   },
+    //   error: (error: HttpErrorResponse) => {
+    //     console.log("an error occured");
+    //     console.log(error);
+    //     console.log(error.message);
+    //     console.log(error.error);
+    //     // this.router.navigate(["../"]);
+    //   }
+    // })
 
   }
 
@@ -112,40 +131,48 @@ export class UserService {
     console.log("image being sent");
     console.log(newImage);
 
-    this.httpClient.post<NewProfile>(environment.basePath + "/image/user/create", newImage, {observe: "response"})
-    .subscribe({
-      next: (response) => {
-        if(response){
-          this.createSuccessful = true;
-        }
-        this.router.navigate(["/dashboard"])
-      },
-      error: (error: HttpErrorResponse) => {
-        console.log(error.message);
-      }    
-    })
+    const httpOptions = {
+      headers: new HttpHeaders({ 
+        'Accept': 'text/html',
+      }), 
+      responseType: 'text' as 'text',
+      // body: newImage
+    };
+
+    return this.httpClient.post(environment.basePath + "/image/user/create", newImage ,httpOptions)
+
+
+    // .subscribe({
+    //   next: (response) => {
+    //     if(response){
+    //       console.log(response);
+    //     }
+    //     // this.router.navigate(["/dashboard"])
+    //   },
+    //   error: (error: HttpErrorResponse) => {
+    //     console.log("an error occured");
+    //     console.log(error);
+    //     console.log(error.message);
+    //     console.log(error.error);
+    //   }    
+    // })
   }
 
+  // this.httpClient.delete(environment.basePath + "/image/user/delete", httpOptions)
 
-  deleteProfilePhoto(imageId: number){
+  deleteProfilePhoto(deleteImage: Image){
     console.log("id of image to be deleted");
-    console.log(imageId);
+    console.log(deleteImage);
 
-    this.httpClient.delete<NewProfile>(environment.basePath + "/image/user/delete/" + imageId, {observe: "response"})
-    .subscribe({
-      next: (response) => {
-        if(response){
-          this.deleteSuccessful = true;
-        }
-        this.router.navigate(["/dashboard"])
-      },
-      error: (error: HttpErrorResponse) => {
-        console.log(error.message);
-      }    
-    })
+    const httpOptions = {
+      headers: new HttpHeaders({ 
+        'Accept': 'text/html',
+      }), 
+      responseType: 'text' as 'text',
+      body: deleteImage
+    };
 
-
+    return this.httpClient.delete(environment.basePath + "/image/user/delete", httpOptions)
+    
   }
-
-
 }

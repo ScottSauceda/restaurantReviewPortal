@@ -21,13 +21,32 @@ export class RestaurantReviewsComponent implements OnInit {
   sessionActive: boolean = false;
   sessionId!: number;
 
+
+
+  editing: boolean = false;
+  updateSuccessful: boolean = false;
+  deleteSuccessful: boolean = false;
+
+
   // id's
   restaurantID!: string|null;
+
+
 
   // inputs
   // userId!: string;
   rating!: number;
   reviewText!: string;
+
+
+  editReviewId!: number;
+  editRating!: number;
+  editReviewText!: string;
+  editedReview!: Review;
+  updateMessage!: string;
+  deleteMessage!: string;
+
+
 
   // models
   allReviews: Review[] = [];
@@ -35,13 +54,21 @@ export class RestaurantReviewsComponent implements OnInit {
   restaurant!: Restaurant;
   newReview!: NewReview;
 
+  currentReview!: Review;
+
 
 
   constructor(private reviewService: ReviewService, private restaurantService: RestaurantService, private route: ActivatedRoute, private router: Router, private datePipe: DatePipe) {  
-      this.newReview = {
+    this.newReview = {
         userId : 0,
         rating: 0,
         reviewText: "Average dining experience. Food and service could be better!"
+    }
+    this.editedReview = {
+      reviewId: 0,
+      userId: 0,
+      rating: 0,
+      reviewText: ""
     }
   }
 
@@ -159,17 +186,83 @@ export class RestaurantReviewsComponent implements OnInit {
 
 
 
-  editReview(){
-    console.log('Edit Review Button Clicked');
+  loadEditPage(clickedReview: Review){
+    console.log('Load Edit Page Clicked');
+    this.editing = true;
+    this.editReviewId = clickedReview.reviewId;
+    console.log(clickedReview);
+    console.log(this.editReviewId);
+
+    this.currentReview = clickedReview;
+  }
+
+  sendEdit(){
+    console.log("Send Edit button clicked");
+
+    this.editedReview.reviewId = this.currentReview.reviewId;
+    this.editedReview.userId = this.currentReview.userId;
+
+
+    if(this.editReviewText == null){
+      this.editedReview.reviewText = this.currentReview.reviewText;
+      console.log('edit review input text was empty');
+      console.log('using current review text');
+    } else {
+      this.editedReview.reviewText = this.editReviewText;
+      console.log('edit review input text was given');
+      console.log('sending new reviewText for edit');
+    }
+
+    this.editedReview.rating = this.editRating;
+
+
+    console.log("this.editedReview");
+    console.log(this.editedReview);
+
+    this.reviewService.updateReview(this.currentReview.reviewId, this.editedReview)
+    .subscribe(
+      res => {
+        this.updateSuccessful = true;
+        console.log('HTTP response', res),
+        this.updateMessage = res;
+      },
+      err => {
+        console.log('HTTP Error', err.error),
+        this.updateMessage = err.error;
+      }, 
+      () => console.log('HTTP request completed.')
+    );
   }
 
   cancelEditReview(){
-    this.adding = false;
+    this.editing = false;
     console.log("Cancel Review Button Clicked");
+    this.editedReview.reviewId = 0;
+    this.editedReview.userId = 0;
+    this.editedReview.rating = 0;
+    this.editedReview.reviewText = "";
+
   }
 
-  deleteReview(){
+  deleteReview(clickedReview: Review){
     console.log("Delete Review Button Clicked");
+    console.log(clickedReview);
+    this.reviewService.deleteReview(clickedReview)
+    .subscribe(
+      res => {
+        this.deleteSuccessful = true;
+        console.log('HTTP response', res),
+        this.deleteMessage = res;
+      },
+      err => {
+        console.log('HTTP Error', err.error),
+        this.deleteMessage = err.error;
+      }, 
+      () => console.log('HTTP request completed.')
+    );
+
+
+
   }
   
 

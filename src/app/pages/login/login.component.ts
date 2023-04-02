@@ -14,8 +14,10 @@ export class LoginComponent implements OnInit {
   userID!: string|null;
 
   user!: User;
+  errorOccured: boolean = false;
 
   loginForm: FormGroup;
+  loginMessage!: string;
 
   constructor(private router: Router, private userService: UserService) { 
     this.loginForm = new FormGroup({
@@ -32,16 +34,17 @@ export class LoginComponent implements OnInit {
   submitForm(){
     console.log(this.loginForm.value);
     
-    this.userService.login(this.loginForm.value);
 
     console.log('login completed');
-    this.userService.login(this.loginForm.value).subscribe((data: User) => {
+    this.userService.login(this.loginForm.value)
+    .subscribe(
+      (data: User) => {
           if(data){
 
             console.log("data returned");
             console.log(data);
 
-            if(data.roleName !== "user"){
+            if(data.roles[0] !== "ROLE_USER"){
               console.log("role does not equal user, redirecting to signup ");
               window.location.replace("/signup");
             } else {
@@ -50,8 +53,8 @@ export class LoginComponent implements OnInit {
               console.log("this.user from login")
               console.log(this.user);
               sessionStorage.setItem("userLoginStatus", "true");
-              sessionStorage.setItem('userId', this.user.usersId.toLocaleString());
-              sessionStorage.setItem('username', this.user.userName);
+              sessionStorage.setItem('userId', this.user.id.toLocaleString());
+              sessionStorage.setItem('username', this.user.username);
   
               console.log('session: loginStatus');
               console.log(sessionStorage.getItem('userLoginStatus'));
@@ -69,7 +72,14 @@ export class LoginComponent implements OnInit {
             alert("incorrect credentials");
             window.location.replace("/signup");
           }
-    });
+    },
+    err => {
+      console.log('HTTP Error', err.error.message),
+      this.errorOccured = true;
+      this.loginMessage = err.error.message;
+    },
+    () => console.log('HTTP request completed.')
+    );
   }
 
 

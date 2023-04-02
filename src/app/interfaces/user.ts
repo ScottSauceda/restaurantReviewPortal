@@ -1,6 +1,6 @@
 export interface User {
-    usersId: number;
-    userName: string;
+    id: number;
+    username: string;
     isActive: Boolean;
-    roleName: string;
+    roles: String[]
 }

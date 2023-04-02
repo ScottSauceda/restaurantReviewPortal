@@ -12,6 +12,9 @@
                     <input type="password" class="form-control" formControlName="password" placeholder="Password" /> 
                 </div>
             </div>
+            <div *ngIf="errorOccured"  class="text-center text-danger">
+                &nbsp;{{loginMessage}}. Please try again.
+            </div>
             <div class="card-footer text-center">
                 <button type="submit" class="btn btn-primary">Login</button>
             </div>

@@ -8,6 +8,8 @@ import { Review } from 'src/app/interfaces/review';
 })
 export class ReviewCardComponent implements OnInit {
 
+  dates!: any[];
+
   @Input()
   reviewData!: Review
 
