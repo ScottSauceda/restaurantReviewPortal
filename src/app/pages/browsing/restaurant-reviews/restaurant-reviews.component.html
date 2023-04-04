@@ -13,27 +13,38 @@
             <div>
                 <p>Restaurant Name : {{restaurant.name}}</p>
                 <p>Restaurant Owner: {{restaurant.ownerName}}</p>
+                <p>Address:</p>
                 <p>{{restaurant.address}}</p>
                 <p>{{restaurant.city}}</p>
                 <p>{{restaurant.state}}</p>
                 <p>{{restaurant.zipCode}}</p>
-                <div class="flex-column" style="border: 2px solid red; padding: 1rem;">
-                    Restaurant Images:
-                    <div *ngFor="let image of restaurant.restaurantImages" imageData="image">
-                        <div style="padding: 1em; border: 2px solid blue;">
-                            <img src={{image.imgSrc}} style="max-width: 500px; height: auto"/>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
-        <div>
-            <div class="border border-primary fill">&nbsp; ============================= </div>
+        
+        <div class="d-flex justify-content-center bg-dark" >
+            <div *ngIf = "!restaurantHasImages">
+                <img src="https://i.pinimg.com/736x/77/7d/9c/777d9c6e187bfc29677c7de89aa73c5a.jpg" alt="default restaurant image" style="max-width: 500px; height: 50vh" />
+            </div>
+            <ngb-carousel>
+                <ng-template ngbSlide *ngFor="let image of restaurant.restaurantImages" imageData="image" >
+                    <div class="wrapper">
+                        <img [src]="image.imgSrc" alt="image.imgName" style="max-width: 500px; height: 50vh" />
+                    </div>
+                    <div class="carousel-caption">
+                        <h3>{{image.imgName}}</h3>
+                    </div>
+                </ng-template>
+            </ngb-carousel>
         </div>
-        <div class="flex-column" style="border: 2px solid red; padding: 1rem;">
-            Restaurant Reviews:
+
+
+        <div>
+            <div>&nbsp; </div>
+        </div>
+        <div class="flex-column" >
+            Reviews:
             <div *ngFor="let review of restaurant.restaurantReviews" reviewData="review">
-                <div style="padding: 1em; border: 2px solid blue;">
+                <div style="padding: 1em; border: 2px solid black">
                     <h5>User Id: {{review.userId}}</h5>
                     <h5>User Name: {{review.userName}}</h5>
                     <h6>Review Date: {{review.timeCreated}}</h6>

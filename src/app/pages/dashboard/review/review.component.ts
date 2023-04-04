@@ -40,6 +40,8 @@ export class ReviewComponent implements OnInit {
       this.reviewID = params.get("reviewId");
       console.log(this.reviewID);
 
+      console.log('you have made it to review component!!!!');
+
       if(this.reviewID){
         this.reviewService.getSelectedReview(this.reviewID).subscribe((data: Review) => {
           if(data){

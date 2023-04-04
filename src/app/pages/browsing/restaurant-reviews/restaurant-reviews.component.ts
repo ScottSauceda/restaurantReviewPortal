@@ -7,6 +7,7 @@ import { Image } from 'src/app/interfaces/image';
 import { Restaurant } from 'src/app/interfaces/restaurant';
 import { RestaurantService } from 'src/app/services/restaurant.service';
 import { ReviewService } from 'src/app/services/review.service';
+import { NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-restaurant-reviews',
@@ -20,24 +21,19 @@ export class RestaurantReviewsComponent implements OnInit {
   adding: boolean = false;
   sessionActive: boolean = false;
   sessionId!: number;
-
-
+  restaurantHasImages: boolean = false;
 
   editing: boolean = false;
   updateSuccessful: boolean = false;
   deleteSuccessful: boolean = false;
 
-
   // id's
   restaurantID!: string|null;
-
-
 
   // inputs
   // userId!: string;
   rating!: number;
   reviewText!: string;
-
 
   editReviewId!: number;
   editRating!: number;
@@ -45,8 +41,6 @@ export class RestaurantReviewsComponent implements OnInit {
   editedReview!: Review;
   updateMessage!: string;
   deleteMessage!: string;
-
-
 
   // models
   allReviews: Review[] = [];
@@ -58,7 +52,7 @@ export class RestaurantReviewsComponent implements OnInit {
 
 
 
-  constructor(private reviewService: ReviewService, private restaurantService: RestaurantService, private route: ActivatedRoute, private router: Router, private datePipe: DatePipe) {  
+  constructor(private reviewService: ReviewService, private restaurantService: RestaurantService, private route: ActivatedRoute, private router: Router, private datePipe: DatePipe, config: NgbCarouselConfig) {  
     this.newReview = {
         userId : 0,
         rating: 0,
@@ -70,6 +64,9 @@ export class RestaurantReviewsComponent implements OnInit {
       rating: 0,
       reviewText: ""
     }
+    config.interval = 0;
+    config.keyboard = true;
+    config.pauseOnHover = true;
   }
 
   ngOnInit(): void {
@@ -120,9 +117,14 @@ export class RestaurantReviewsComponent implements OnInit {
             // console.log("all reviews");
             // console.log(this.allReviews);
 
-            for(let i = 0; i < this.restaurant.restaurantImages.length; i++){
-              this.allImages.push(this.restaurant.restaurantImages[i]);
-              console.log(this.restaurant.restaurantImages[i].imgName);
+            if(this.restaurant.restaurantImages.length > 0){
+              this.restaurantHasImages = true;
+              for(let i = 0; i < this.restaurant.restaurantImages.length; i++){
+                this.allImages.push(this.restaurant.restaurantImages[i]);
+                console.log(this.restaurant.restaurantImages[i].imgName);
+              }
+            } else {
+              this.restaurantHasImages = false;
             }
 
             // console.log("all images");
